@@ -1,0 +1,563 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		100E78332CFD3F5800EF4B1D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 100E781A2CFD3F5700EF4B1D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 100E78212CFD3F5700EF4B1D;
+			remoteInfo = CivicCircleApp;
+		};
+		100E783D2CFD3F5800EF4B1D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 100E781A2CFD3F5700EF4B1D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 100E78212CFD3F5700EF4B1D;
+			remoteInfo = CivicCircleApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		100E78222CFD3F5700EF4B1D /* CivicCircleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CivicCircleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		100E78322CFD3F5800EF4B1D /* CivicCircleAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CivicCircleAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		100E783C2CFD3F5800EF4B1D /* CivicCircleAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CivicCircleAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		100E78242CFD3F5700EF4B1D /* CivicCircleApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CivicCircleApp;
+			sourceTree = "<group>";
+		};
+		100E78352CFD3F5800EF4B1D /* CivicCircleAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CivicCircleAppTests;
+			sourceTree = "<group>";
+		};
+		100E783F2CFD3F5800EF4B1D /* CivicCircleAppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CivicCircleAppUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		100E781F2CFD3F5700EF4B1D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		100E782F2CFD3F5800EF4B1D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		100E78392CFD3F5800EF4B1D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		100E78192CFD3F5700EF4B1D = {
+			isa = PBXGroup;
+			children = (
+				100E78242CFD3F5700EF4B1D /* CivicCircleApp */,
+				100E78352CFD3F5800EF4B1D /* CivicCircleAppTests */,
+				100E783F2CFD3F5800EF4B1D /* CivicCircleAppUITests */,
+				100E78232CFD3F5700EF4B1D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		100E78232CFD3F5700EF4B1D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				100E78222CFD3F5700EF4B1D /* CivicCircleApp.app */,
+				100E78322CFD3F5800EF4B1D /* CivicCircleAppTests.xctest */,
+				100E783C2CFD3F5800EF4B1D /* CivicCircleAppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		100E78212CFD3F5700EF4B1D /* CivicCircleApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 100E78462CFD3F5800EF4B1D /* Build configuration list for PBXNativeTarget "CivicCircleApp" */;
+			buildPhases = (
+				100E781E2CFD3F5700EF4B1D /* Sources */,
+				100E781F2CFD3F5700EF4B1D /* Frameworks */,
+				100E78202CFD3F5700EF4B1D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				100E78242CFD3F5700EF4B1D /* CivicCircleApp */,
+			);
+			name = CivicCircleApp;
+			packageProductDependencies = (
+			);
+			productName = CivicCircleApp;
+			productReference = 100E78222CFD3F5700EF4B1D /* CivicCircleApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		100E78312CFD3F5800EF4B1D /* CivicCircleAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 100E78492CFD3F5800EF4B1D /* Build configuration list for PBXNativeTarget "CivicCircleAppTests" */;
+			buildPhases = (
+				100E782E2CFD3F5800EF4B1D /* Sources */,
+				100E782F2CFD3F5800EF4B1D /* Frameworks */,
+				100E78302CFD3F5800EF4B1D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				100E78342CFD3F5800EF4B1D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				100E78352CFD3F5800EF4B1D /* CivicCircleAppTests */,
+			);
+			name = CivicCircleAppTests;
+			packageProductDependencies = (
+			);
+			productName = CivicCircleAppTests;
+			productReference = 100E78322CFD3F5800EF4B1D /* CivicCircleAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		100E783B2CFD3F5800EF4B1D /* CivicCircleAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 100E784C2CFD3F5800EF4B1D /* Build configuration list for PBXNativeTarget "CivicCircleAppUITests" */;
+			buildPhases = (
+				100E78382CFD3F5800EF4B1D /* Sources */,
+				100E78392CFD3F5800EF4B1D /* Frameworks */,
+				100E783A2CFD3F5800EF4B1D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				100E783E2CFD3F5800EF4B1D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				100E783F2CFD3F5800EF4B1D /* CivicCircleAppUITests */,
+			);
+			name = CivicCircleAppUITests;
+			packageProductDependencies = (
+			);
+			productName = CivicCircleAppUITests;
+			productReference = 100E783C2CFD3F5800EF4B1D /* CivicCircleAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		100E781A2CFD3F5700EF4B1D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					100E78212CFD3F5700EF4B1D = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					100E78312CFD3F5800EF4B1D = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 100E78212CFD3F5700EF4B1D;
+					};
+					100E783B2CFD3F5800EF4B1D = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 100E78212CFD3F5700EF4B1D;
+					};
+				};
+			};
+			buildConfigurationList = 100E781D2CFD3F5700EF4B1D /* Build configuration list for PBXProject "CivicCircleApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 100E78192CFD3F5700EF4B1D;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 100E78232CFD3F5700EF4B1D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				100E78212CFD3F5700EF4B1D /* CivicCircleApp */,
+				100E78312CFD3F5800EF4B1D /* CivicCircleAppTests */,
+				100E783B2CFD3F5800EF4B1D /* CivicCircleAppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		100E78202CFD3F5700EF4B1D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		100E78302CFD3F5800EF4B1D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		100E783A2CFD3F5800EF4B1D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		100E781E2CFD3F5700EF4B1D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		100E782E2CFD3F5800EF4B1D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		100E78382CFD3F5800EF4B1D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		100E78342CFD3F5800EF4B1D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 100E78212CFD3F5700EF4B1D /* CivicCircleApp */;
+			targetProxy = 100E78332CFD3F5800EF4B1D /* PBXContainerItemProxy */;
+		};
+		100E783E2CFD3F5800EF4B1D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 100E78212CFD3F5700EF4B1D /* CivicCircleApp */;
+			targetProxy = 100E783D2CFD3F5800EF4B1D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		100E78442CFD3F5800EF4B1D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		100E78452CFD3F5800EF4B1D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		100E78472CFD3F5800EF4B1D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CivicCircleApp/Preview Content\"";
+				DEVELOPMENT_TEAM = GFWJK85N5T;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sunil.georgianc.on.ca.CivicCircleApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		100E78482CFD3F5800EF4B1D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CivicCircleApp/Preview Content\"";
+				DEVELOPMENT_TEAM = GFWJK85N5T;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sunil.georgianc.on.ca.CivicCircleApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		100E784A2CFD3F5800EF4B1D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GFWJK85N5T;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sunil.georgianc.on.ca.CivicCircleAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CivicCircleApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CivicCircleApp";
+			};
+			name = Debug;
+		};
+		100E784B2CFD3F5800EF4B1D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GFWJK85N5T;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sunil.georgianc.on.ca.CivicCircleAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CivicCircleApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CivicCircleApp";
+			};
+			name = Release;
+		};
+		100E784D2CFD3F5800EF4B1D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GFWJK85N5T;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sunil.georgianc.on.ca.CivicCircleAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CivicCircleApp;
+			};
+			name = Debug;
+		};
+		100E784E2CFD3F5800EF4B1D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GFWJK85N5T;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sunil.georgianc.on.ca.CivicCircleAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CivicCircleApp;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		100E781D2CFD3F5700EF4B1D /* Build configuration list for PBXProject "CivicCircleApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				100E78442CFD3F5800EF4B1D /* Debug */,
+				100E78452CFD3F5800EF4B1D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		100E78462CFD3F5800EF4B1D /* Build configuration list for PBXNativeTarget "CivicCircleApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				100E78472CFD3F5800EF4B1D /* Debug */,
+				100E78482CFD3F5800EF4B1D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		100E78492CFD3F5800EF4B1D /* Build configuration list for PBXNativeTarget "CivicCircleAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				100E784A2CFD3F5800EF4B1D /* Debug */,
+				100E784B2CFD3F5800EF4B1D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		100E784C2CFD3F5800EF4B1D /* Build configuration list for PBXNativeTarget "CivicCircleAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				100E784D2CFD3F5800EF4B1D /* Debug */,
+				100E784E2CFD3F5800EF4B1D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 100E781A2CFD3F5700EF4B1D /* Project object */;
+}
