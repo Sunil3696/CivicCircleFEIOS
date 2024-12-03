@@ -37,6 +37,7 @@
 		100E78842CFD8C5200EF4B1D /* Exceptions for "CivicCircleApp" folder in "CivicCircleApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Views/Untitled 2.swift",
 				Views/Untitled.swift,
 			);
 			target = 100E78212CFD3F5700EF4B1D /* CivicCircleApp */;

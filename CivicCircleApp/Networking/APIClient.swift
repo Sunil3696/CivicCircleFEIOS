@@ -202,13 +202,13 @@ print(body)
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("❌ Network error: \(error.localizedDescription)")
+//                print("❌ Network error: \(error.localizedDescription)")
                 completion(.failure(error))
                 return
             }
 
             if let httpResponse = response as? HTTPURLResponse {
-                print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+//                print("📥 HTTP Status Code: \(httpResponse.statusCode)")
             }
 
             guard let data = data else {
@@ -218,15 +218,15 @@ print(body)
 
             // Debugging raw JSON response
             if let jsonString = String(data: data, encoding: .utf8) {
-                print("📥 Raw Response Data: \(jsonString)")
+//                print("📥 Raw Response Data: \(jsonString)")
             }
 
             do {
                 let forums = try JSONDecoder().decode([Forum].self, from: data)
-                print("✅ Decoded Forums: \(forums)")
+//                print("✅ Decoded Forums: \(forums)")
                 completion(.success(forums))
             } catch {
-                print("❌ Decoding error: \(error.localizedDescription)")
+//                print("❌ Decoding error: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }.resume()
@@ -424,8 +424,250 @@ print(body)
 
     
    }
+
+extension APIClient {
+    func fetchEvents(completion: @escaping (Result<[Event], Error>) -> Void) {
+        guard let url = URL(string: "\(baseURL)events") else {
+            completion(.failure(NSError(domain: "Invalid URL", code: 0)))
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                completion(.failure(NSError(domain: "No data", code: 0)))
+                return
+            }
+
+            do {
+                let events = try JSONDecoder().decode([Event].self, from: data)
+                completion(.success(events))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
     
+    func fetchEventById(id: String, completion: @escaping (Result<Event, Error>) -> Void) {
+            guard let url = URL(string: "\(baseURL)events/\(id)") else {
+                completion(.failure(NSError(domain: "Invalid URL", code: 0)))
+                return
+            }
+
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+
+                guard let data = data else {
+                    completion(.failure(NSError(domain: "No data", code: 0)))
+                    return
+                }
+
+                do {
+                    let event = try JSONDecoder().decode(Event.self, from: data)
+                    completion(.success(event))
+                } catch {
+                    completion(.failure(error))
+                }
+            }.resume()
+        }
+
+    func likeEvent(eventId: String, completion: @escaping (Result<Int, APIError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)events/\(eventId)/like") else {
+            completion(.failure(.invalidResponse))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        print("📤 Sending request to: \(url)")
+        request.httpMethod = "POST"
+        if let token = UserDefaults.standard.string(forKey: "authToken") {
+            request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("❌ Network error: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(.failure(.networkError(error.localizedDescription)))
+                }
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data else {
+                print("❌ Invalid response or status code")
+                DispatchQueue.main.async {
+                    completion(.failure(.unexpectedStatusCode))
+                }
+                return
+            }
+
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let updatedLikes = json["likes"] as? Int {
+                    print("✅ Successfully updated likes: \(updatedLikes)")
+                    DispatchQueue.main.async {
+                        completion(.success(updatedLikes))
+                    }
+                } else {
+                    print("❌ Invalid data in response")
+                    DispatchQueue.main.async {
+                        completion(.failure(.invalidResponse))
+                    }
+                }
+            } catch {
+                print("❌ JSON decoding error: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(.failure(.invalidResponse))
+                }
+            }
+        }.resume()
+    }
+
+
+
+    func joinEvent(eventId: String, completion: @escaping (Result<Void, APIError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)events/\(eventId)/join") else {
+            print("❌ Invalid URL: \(baseURL)events/\(eventId)/join")
+            completion(.failure(.invalidResponse))
+            return
+        }
+        var request = URLRequest(url: url)
+        print("📤 Request URL: \(url)")
+        request.httpMethod = "POST"
+        
+        if let token = UserDefaults.standard.string(forKey: "authToken") {
+            print("📥 Authorization Token: \(token)")
+            request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+        } else {
+            print("❌ No auth token found in UserDefaults")
+        }
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("❌ Network Error: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(.failure(.networkError(error.localizedDescription)))
+                }
+                return
+            }
+
+            if let httpResponse = response as? HTTPURLResponse {
+                print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+            } else {
+                print("❌ Failed to cast response to HTTPURLResponse")
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    completion(.failure(.invalidResponse))
+                }
+                return
+            }
+
+            if let data = data, let responseString = String(data: data, encoding: .utf8) {
+                print("📥 Response Data: \(responseString)")
+            } else {
+                print("❌ No response data received")
+            }
+
+            if httpResponse.statusCode == 400 {
+                if let data = data, let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let errorMessage = json["error"] as? String {
+                    print("❌ Server Error Message: \(errorMessage)")
+                    DispatchQueue.main.async {
+                        completion(.failure(.networkError(errorMessage)))
+                    }
+                } else {
+                    print("❌ Unexpected Status Code: \(httpResponse.statusCode)")
+                    DispatchQueue.main.async {
+                        completion(.failure(.unexpectedStatusCode))
+                    }
+                }
+                return
+            }
+
+            if httpResponse.statusCode == 200 {
+                print("✅ Successfully joined the event")
+                DispatchQueue.main.async {
+                    completion(.success(()))
+                }
+            } else {
+                print("❌ Unexpected Status Code: \(httpResponse.statusCode)")
+                DispatchQueue.main.async {
+                    completion(.failure(.unexpectedStatusCode))
+                }
+            }
+        }.resume()
+    }
+
     
+ 
+        func cancelParticipation(eventId: String, completion: @escaping (Result<Void, APIError>) -> Void) {
+            guard let url = URL(string: "\(baseURL)events/\(eventId)/cancel") else {
+                completion(.failure(.invalidResponse))
+                return
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            if let token = UserDefaults.standard.string(forKey: "authToken") {
+                request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+            }
+
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        completion(.failure(.networkError(error.localizedDescription)))
+                    }
+                    return
+                }
+
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    DispatchQueue.main.async {
+                        completion(.failure(.invalidResponse))
+                    }
+                    return
+                }
+
+                if httpResponse.statusCode == 400 {
+                    if let data = data, let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                       let errorMessage = json["error"] as? String {
+                        DispatchQueue.main.async {
+                            completion(.failure(.networkError(errorMessage)))
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            completion(.failure(.unexpectedStatusCode))
+                        }
+                    }
+                    return
+                }
+
+                if httpResponse.statusCode == 200 {
+                    DispatchQueue.main.async {
+                        completion(.success(()))
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        completion(.failure(.unexpectedStatusCode))
+                    }
+                }
+            }.resume()
+        }
+    
+
+
+        
+}
+
+
     
 
 
