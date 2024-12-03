@@ -4,7 +4,6 @@
 //
 
 import Foundation
-
 struct Forum: Codable, Identifiable {
     let id: String // Maps "_id" from the JSON
     let title: String
@@ -31,10 +30,15 @@ struct Forum: Codable, Identifiable {
         }
     }
 
-    struct Comment: Codable {
+    struct Comment: Codable, Identifiable {
+        let id: String // Maps "_id" from the JSON
         let body: String
         let date: String
-        let creator: Creator
+        let creator: String // Only creator ID is provided
+
+        enum CodingKeys: String, CodingKey {
+            case id = "_id"
+            case body, date, creator
+        }
     }
 }
-

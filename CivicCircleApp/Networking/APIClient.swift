@@ -216,12 +216,14 @@ print(body)
                 return
             }
 
-            // Debugging the raw response data
-            print("📥 Raw Response Data: \(String(data: data, encoding: .utf8) ?? "Unable to parse data")")
+            // Debugging raw JSON response
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("📥 Raw Response Data: \(jsonString)")
+            }
 
             do {
                 let forums = try JSONDecoder().decode([Forum].self, from: data)
-                print("✅ Fetched Forums: \(forums)")
+                print("✅ Decoded Forums: \(forums)")
                 completion(.success(forums))
             } catch {
                 print("❌ Decoding error: \(error.localizedDescription)")
@@ -229,6 +231,7 @@ print(body)
             }
         }.resume()
     }
+
 
     // Create forum post with optional image
     

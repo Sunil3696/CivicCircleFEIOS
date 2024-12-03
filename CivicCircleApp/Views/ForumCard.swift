@@ -49,6 +49,24 @@ struct ForumCardView: View {
                 }
             }
 
+            if !forum.comments.isEmpty {
+                Text("Comments:")
+                    .font(.headline)
+                    .padding(.top, 5)
+                
+                ForEach(forum.comments) { comment in
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text(comment.body)
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                        Text(comment.date.formattedDate())
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.vertical, 5)
+                }
+            }
+
             HStack {
                 Button(action: {}) {
                     Label("\(forum.likes.count)", systemImage: "heart.fill")
