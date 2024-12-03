@@ -333,6 +333,94 @@ print(body)
             }
         }.resume()
     }
+    
+    
+    func likeForumPost(postId: String, completion: @escaping (Result<Int, Error>) -> Void) {
+        guard let url = URL(string: "\(baseURL)forums/\(postId)/like") else {
+            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        if let token = UserDefaults.standard.string(forKey: "authToken") {
+            request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        // Empty body as the backend does not require any specific payload
+        request.httpBody = try? JSONSerialization.data(withJSONObject: [:])
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data, let httpResponse = response as? HTTPURLResponse else {
+                completion(.failure(NSError(domain: "Invalid Response", code: 0, userInfo: nil)))
+                return
+            }
+
+            // Debugging HTTP response
+            print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Response: \(responseString)")
+            }
+
+            if httpResponse.statusCode == 200 {
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any], let likes = json["likes"] as? Int {
+                        completion(.success(likes))
+                    } else {
+                        completion(.failure(NSError(domain: "Invalid Data", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid response data"])))
+                    }
+                } catch {
+                    completion(.failure(error))
+                }
+            } else {
+                completion(.failure(NSError(domain: "Server Error", code: httpResponse.statusCode, userInfo: nil)))
+            }
+        }.resume()
+    }
+
+    
+    func addCommentToForum(postId: String, body: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let url = URL(string: "\(baseURL)forums/\(postId)/comment") else {
+            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        if let token = UserDefaults.standard.string(forKey: "authToken") {
+            request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        
+       
+        let bodyData = ["text": body]
+        let jsonData = try? JSONSerialization.data(withJSONObject: bodyData)
+
+        request.httpBody = jsonData
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                completion(.failure(NSError(domain: "Invalid Response", code: 0, userInfo: nil)))
+                return
+            }
+
+            completion(.success(()))
+        }.resume()
+    }
+
+
 
     
    }
