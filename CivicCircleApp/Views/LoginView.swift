@@ -122,7 +122,7 @@ struct LoginView: View {
             }
             .navigationBarHidden(true) // Hide navigation bar on login
             .fullScreenCover(isPresented: $navigateToHome) {
-                HomeView() // Navigate to HomeView on successful login
+                MainTabView()  // Navigate to HomeView on successful login
             }
         }
     }
