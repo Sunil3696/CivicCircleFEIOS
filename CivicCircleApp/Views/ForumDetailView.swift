@@ -4,8 +4,8 @@ struct ForumDetailView: View {
     @State private var forum: Forum
     @State private var isLoading = false
     @State private var errorMessage: String?
-    @State private var newComment: String = "" // Input for new comment
-    @State private var isSubmittingComment = false // Loading state for comment submission
+    @State private var newComment: String = ""
+    @State private var isSubmittingComment = false 
 
     init(forum: Forum) {
         self._forum = State(initialValue: forum)

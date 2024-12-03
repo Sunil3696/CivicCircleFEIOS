@@ -7,7 +7,7 @@ struct ProfileView: View {
     @State private var errorMessage: String?
     @State private var showAlert = false
     @State private var alertMessage = ""
-    @State private var isLoggedOut = false // State to track logout navigation
+    @State private var isLoggedOut = false
 
     var body: some View {
         NavigationView {
@@ -109,7 +109,7 @@ struct ProfileView: View {
                 switch result {
                 case .success(let fetchedUser):
                     self.user = fetchedUser
-                    self.fetchUserEvents() // Fetch events after fetching user data
+                    self.fetchUserEvents()
                 case .failure(let error):
                     self.errorMessage = "Failed to load user info: \(error.localizedDescription)"
                     self.isLoading = false
@@ -150,11 +150,16 @@ struct ProfileView: View {
 
     private func logout() {
         print("🚪 Logging out user...")
-        UserDefaults.standard.removeObject(forKey: "authToken") // Clear authentication token
-        alertMessage = "You have been logged out."
-        showAlert = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            isLoggedOut = true // Navigate to LoginView
+        UserDefaults.standard.removeObject(forKey: "authToken")
+        
+        // Reset the root view to LoginView
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+            print("❌ Unable to access window scene.")
+            return
+        }
+        if let window = windowScene.windows.first {
+            window.rootViewController = UIHostingController(rootView: LoginView())
+            window.makeKeyAndVisible()
         }
     }
 

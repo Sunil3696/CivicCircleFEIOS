@@ -5,7 +5,7 @@
 
 import Foundation
 struct Forum: Codable, Identifiable {
-    let id: String // Maps "_id" from the JSON
+    let id: String
     let title: String
     let content: String
     let images: [String]
@@ -21,7 +21,7 @@ struct Forum: Codable, Identifiable {
     }
 
     struct Creator: Codable {
-        let id: String // Maps "_id" from the JSON
+        let id: String
         let email: String
 
         enum CodingKeys: String, CodingKey {
@@ -31,10 +31,10 @@ struct Forum: Codable, Identifiable {
     }
 
     struct Comment: Codable, Identifiable {
-        let id: String // Maps "_id" from the JSON
+        let id: String
         let body: String
         let date: String
-        let creator: String // Only creator ID is provided
+        let creator: String 
 
         enum CodingKeys: String, CodingKey {
             case id = "_id"

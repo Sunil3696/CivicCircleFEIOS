@@ -23,13 +23,12 @@ struct MainTabView: View {
                     Label("Notifications", systemImage: "bell.fill")
                 }
 
-            ProfileView() // Use the fully implemented ProfileView
+            ProfileView()
                 .tabItem {
                     Label("Profile", systemImage: "person.crop.circle.fill")
                 }
         }
-        .accentColor(.blue) // Tab bar tint color
-    }
+        .accentColor(.blue)    }
 }
 
 

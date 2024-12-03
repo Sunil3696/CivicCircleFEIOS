@@ -15,7 +15,7 @@ struct RegisterView: View {
     @State private var errorMessage: String? = nil
     @State private var isLoading = false
     @State private var showSuccessPopup = false
-    @Environment(\.dismiss) private var dismiss // Environment dismiss
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
@@ -134,7 +134,7 @@ struct RegisterView: View {
                     }
                 )
             }
-            .navigationBarHidden(true) // Hide navigation bar on register
+            .navigationBarHidden(true)
         }
     }
 

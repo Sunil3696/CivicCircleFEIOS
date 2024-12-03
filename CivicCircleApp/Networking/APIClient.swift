@@ -202,13 +202,13 @@ print(body)
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-//                print("❌ Network error: \(error.localizedDescription)")
+//                print(" Network error: \(error.localizedDescription)")
                 completion(.failure(error))
                 return
             }
 
             if let httpResponse = response as? HTTPURLResponse {
-//                print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+//                print(" HTTP Status Code: \(httpResponse.statusCode)")
             }
 
             guard let data = data else {
@@ -218,15 +218,15 @@ print(body)
 
             // Debugging raw JSON response
             if let jsonString = String(data: data, encoding: .utf8) {
-//                print("📥 Raw Response Data: \(jsonString)")
+//                print(" Raw Response Data: \(jsonString)")
             }
 
             do {
                 let forums = try JSONDecoder().decode([Forum].self, from: data)
-//                print("✅ Decoded Forums: \(forums)")
+//                print(" Decoded Forums: \(forums)")
                 completion(.success(forums))
             } catch {
-//                print("❌ Decoding error: \(error.localizedDescription)")
+//                print(" Decoding error: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }.resume()
@@ -238,7 +238,7 @@ print(body)
     
     func createForumPost(title: String, content: String, image: UIImage?, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)forums") else {
-            print("❌ Invalid URL")
+            print(" Invalid URL")
             completion(.failure(NSError(domain: "Invalid URL", code: 0)))
             return
         }
@@ -271,23 +271,23 @@ print(body)
         request.httpBody = body
 
         // Debugging logs
-        print("📤 Sending request to: \(url)")
+        print(" Sending request to: \(url)")
         print("Headers: \(request.allHTTPHeaderFields ?? [:])")
         print("Body: \(String(data: body, encoding: .utf8) ?? "Unable to parse body")")
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("❌ Network error: \(error.localizedDescription)")
+                print(" Network error: \(error.localizedDescription)")
                 completion(.failure(error))
                 return
             }
 
             if let httpResponse = response as? HTTPURLResponse {
-                print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+                print(" HTTP Status Code: \(httpResponse.statusCode)")
             }
 
             if let data = data {
-                print("📥 Response Data: \(String(data: data, encoding: .utf8) ?? "No response body")")
+                print(" Response Data: \(String(data: data, encoding: .utf8) ?? "No response body")")
             }
 
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 201 else {
@@ -363,7 +363,7 @@ print(body)
             }
 
             // Debugging HTTP response
-            print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+            print(" HTTP Status Code: \(httpResponse.statusCode)")
             if let responseString = String(data: data, encoding: .utf8) {
                 print("Response: \(responseString)")
             }
@@ -428,41 +428,41 @@ print(body)
 extension APIClient {
     func fetchEvents(completion: @escaping (Result<[Event], Error>) -> Void) {
             guard let url = URL(string: "\(baseURL)events") else {
-                print("❌ Invalid URL: \(baseURL)events")
+                print(" Invalid URL: \(baseURL)events")
                 completion(.failure(NSError(domain: "Invalid URL", code: 0)))
                 return
             }
 
-            print("📤 Sending request to: \(url)")
+            print(" Sending request to: \(url)")
 
             URLSession.shared.dataTask(with: url) { data, response, error in
                 if let error = error {
-                    print("❌ Network error: \(error.localizedDescription)")
+                    print(" Network error: \(error.localizedDescription)")
                     completion(.failure(error))
                     return
                 }
 
                 if let httpResponse = response as? HTTPURLResponse {
-                    print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+                    print(" HTTP Status Code: \(httpResponse.statusCode)")
                 }
 
                 guard let data = data else {
-                    print("❌ No data received")
+                    print(" No data received")
                     completion(.failure(NSError(domain: "No data", code: 0)))
                     return
                 }
 
                 // Debugging raw JSON response
                 if let jsonString = String(data: data, encoding: .utf8) {
-                    print("📥 Raw Response Data: \(jsonString)")
+                    print(" Raw Response Data: \(jsonString)")
                 }
 
                 do {
                     let events = try JSONDecoder().decode([Event].self, from: data)
-                    print("✅ Successfully decoded events: \(events.count) items")
+                    print(" Successfully decoded events: \(events.count) items")
                     completion(.success(events))
                 } catch {
-                    print("❌ Decoding error: \(error.localizedDescription)")
+                    print(" Decoding error: \(error.localizedDescription)")
                     completion(.failure(error))
                 }
             }.resume()
@@ -501,7 +501,7 @@ extension APIClient {
         }
 
         var request = URLRequest(url: url)
-        print("📤 Sending request to: \(url)")
+        print(" Sending request to: \(url)")
         request.httpMethod = "POST"
         if let token = UserDefaults.standard.string(forKey: "authToken") {
             request.setValue("\(token)", forHTTPHeaderField: "Authorization")
@@ -509,7 +509,7 @@ extension APIClient {
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("❌ Network error: \(error.localizedDescription)")
+                print(" Network error: \(error.localizedDescription)")
                 DispatchQueue.main.async {
                     completion(.failure(.networkError(error.localizedDescription)))
                 }
@@ -517,7 +517,7 @@ extension APIClient {
             }
 
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data else {
-                print("❌ Invalid response or status code")
+                print(" Invalid response or status code")
                 DispatchQueue.main.async {
                     completion(.failure(.unexpectedStatusCode))
                 }
@@ -527,18 +527,18 @@ extension APIClient {
             do {
                 if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                    let updatedLikes = json["likes"] as? Int {
-                    print("✅ Successfully updated likes: \(updatedLikes)")
+                    print(" Successfully updated likes: \(updatedLikes)")
                     DispatchQueue.main.async {
                         completion(.success(updatedLikes))
                     }
                 } else {
-                    print("❌ Invalid data in response")
+                    print(" Invalid data in response")
                     DispatchQueue.main.async {
                         completion(.failure(.invalidResponse))
                     }
                 }
             } catch {
-                print("❌ JSON decoding error: \(error.localizedDescription)")
+                print(" JSON decoding error: \(error.localizedDescription)")
                 DispatchQueue.main.async {
                     completion(.failure(.invalidResponse))
                 }
@@ -550,24 +550,24 @@ extension APIClient {
 
     func joinEvent(eventId: String, completion: @escaping (Result<Void, APIError>) -> Void) {
         guard let url = URL(string: "\(baseURL)events/\(eventId)/join") else {
-            print("❌ Invalid URL: \(baseURL)events/\(eventId)/join")
+            print(" Invalid URL: \(baseURL)events/\(eventId)/join")
             completion(.failure(.invalidResponse))
             return
         }
         var request = URLRequest(url: url)
-        print("📤 Request URL: \(url)")
+        print(" Request URL: \(url)")
         request.httpMethod = "POST"
         
         if let token = UserDefaults.standard.string(forKey: "authToken") {
-            print("📥 Authorization Token: \(token)")
+            print(" Authorization Token: \(token)")
             request.setValue("\(token)", forHTTPHeaderField: "Authorization")
         } else {
-            print("❌ No auth token found in UserDefaults")
+            print(" No auth token found in UserDefaults")
         }
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("❌ Network Error: \(error.localizedDescription)")
+                print(" Network Error: \(error.localizedDescription)")
                 DispatchQueue.main.async {
                     completion(.failure(.networkError(error.localizedDescription)))
                 }
@@ -575,9 +575,9 @@ extension APIClient {
             }
 
             if let httpResponse = response as? HTTPURLResponse {
-                print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+                print(" HTTP Status Code: \(httpResponse.statusCode)")
             } else {
-                print("❌ Failed to cast response to HTTPURLResponse")
+                print(" Failed to cast response to HTTPURLResponse")
             }
 
             guard let httpResponse = response as? HTTPURLResponse else {
@@ -588,20 +588,20 @@ extension APIClient {
             }
 
             if let data = data, let responseString = String(data: data, encoding: .utf8) {
-                print("📥 Response Data: \(responseString)")
+                print(" Response Data: \(responseString)")
             } else {
-                print("❌ No response data received")
+                print(" No response data received")
             }
 
             if httpResponse.statusCode == 400 {
                 if let data = data, let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                    let errorMessage = json["error"] as? String {
-                    print("❌ Server Error Message: \(errorMessage)")
+                    print(" Server Error Message: \(errorMessage)")
                     DispatchQueue.main.async {
                         completion(.failure(.networkError(errorMessage)))
                     }
                 } else {
-                    print("❌ Unexpected Status Code: \(httpResponse.statusCode)")
+                    print(" Unexpected Status Code: \(httpResponse.statusCode)")
                     DispatchQueue.main.async {
                         completion(.failure(.unexpectedStatusCode))
                     }
@@ -610,12 +610,12 @@ extension APIClient {
             }
 
             if httpResponse.statusCode == 200 {
-                print("✅ Successfully joined the event")
+                print(" Successfully joined the event")
                 DispatchQueue.main.async {
                     completion(.success(()))
                 }
             } else {
-                print("❌ Unexpected Status Code: \(httpResponse.statusCode)")
+                print(" Unexpected Status Code: \(httpResponse.statusCode)")
                 DispatchQueue.main.async {
                     completion(.failure(.unexpectedStatusCode))
                 }
@@ -690,7 +690,7 @@ extension APIClient {
 extension APIClient {
     func fetchUserEvents(completion: @escaping (Result<[UserEvent], APIError>) -> Void) {
         guard let url = URL(string: "\(baseURL)events/myEvents") else {
-            print("❌ Invalid URL: \(baseURL)events/myEvents")
+            print(" Invalid URL: \(baseURL)events/myEvents")
             completion(.failure(.invalidResponse))
             return
         }
@@ -700,50 +700,50 @@ extension APIClient {
         if let token = UserDefaults.standard.string(forKey: "authToken") {
             request.setValue("\(token)", forHTTPHeaderField: "Authorization")
         } else {
-            print("❌ Missing auth token")
+            print(" Missing auth token")
         }
         
-        print("📤 Fetching user events with URL: \(url)")
+        print(" Fetching user events with URL: \(url)")
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("❌ Network error: \(error.localizedDescription)")
+                print(" Network error: \(error.localizedDescription)")
                 completion(.failure(.networkError(error.localizedDescription)))
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ Invalid response from server")
+                print(" Invalid response from server")
                 completion(.failure(.invalidResponse))
                 return
             }
             
-            print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+            print(" HTTP Status Code: \(httpResponse.statusCode)")
             
             if httpResponse.statusCode != 200 {
-                print("❌ Unexpected status code: \(httpResponse.statusCode)")
+                print(" Unexpected status code: \(httpResponse.statusCode)")
                 completion(.failure(.unexpectedStatusCode))
                 return
             }
             
             guard let data = data else {
-                print("❌ No data received from server")
+                print(" No data received from server")
                 completion(.failure(.invalidResponse))
                 return
             }
             
             if let responseString = String(data: data, encoding: .utf8) {
-                print("📥 Response Data: \(responseString)")
+                print(" Response Data: \(responseString)")
             } else {
-                print("❌ Unable to parse response data")
+                print(" Unable to parse response data")
             }
             
             do {
                 let events = try JSONDecoder().decode([UserEvent].self, from: data)
-                print("✅ Decoded user events: \(events)")
+                print(" Decoded user events: \(events)")
                 completion(.success(events))
             } catch {
-                print("❌ Decoding error: \(error.localizedDescription)")
+                print(" Decoding error: \(error.localizedDescription)")
                 completion(.failure(.unknownError))
             }
         }.resume()
@@ -751,7 +751,7 @@ extension APIClient {
     
     func deleteEvent(eventId: String, completion: @escaping (Result<Void, APIError>) -> Void) {
         guard let url = URL(string: "\(baseURL)events/\(eventId)") else {
-            print("❌ Invalid URL: \(baseURL)events/\(eventId)")
+            print(" Invalid URL: \(baseURL)events/\(eventId)")
             completion(.failure(.invalidResponse))
             return
         }
@@ -761,35 +761,35 @@ extension APIClient {
         if let token = UserDefaults.standard.string(forKey: "authToken") {
             request.setValue("\(token)", forHTTPHeaderField: "Authorization")
         } else {
-            print("❌ Missing auth token")
+            print(" Missing auth token")
         }
         
-        print("📤 Deleting event with ID: \(eventId) using URL: \(url)")
+        print(" Deleting event with ID: \(eventId) using URL: \(url)")
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("❌ Network error: \(error.localizedDescription)")
+                print(" Network error: \(error.localizedDescription)")
                 completion(.failure(.networkError(error.localizedDescription)))
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ Invalid response from server")
+                print(" Invalid response from server")
                 completion(.failure(.invalidResponse))
                 return
             }
             
-            print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+            print(" HTTP Status Code: \(httpResponse.statusCode)")
             
             if httpResponse.statusCode != 200 {
                 if let data = data, let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ Error Response: \(responseString)")
+                    print(" Error Response: \(responseString)")
                 }
                 completion(.failure(.unexpectedStatusCode))
                 return
             }
             
-            print("✅ Event with ID \(eventId) deleted successfully")
+            print(" Event with ID \(eventId) deleted successfully")
             completion(.success(()))
         }.resume()
     }
@@ -797,7 +797,7 @@ extension APIClient {
     
     func fetchUserInfo(completion: @escaping (Result<User, APIError>) -> Void) {
         guard let url = URL(string: "\(baseURL)auth/me") else {
-            print("❌ Invalid URL: \(baseURL)auth/me")
+            print(" Invalid URL: \(baseURL)auth/me")
             completion(.failure(.invalidResponse))
             return
         }
@@ -806,16 +806,16 @@ extension APIClient {
         request.httpMethod = "GET"
         if let token = UserDefaults.standard.string(forKey: "authToken") {
             request.setValue("\(token)", forHTTPHeaderField: "Authorization")
-            print("📥 Authorization Token: \(token)")
+            print(" Authorization Token: \(token)")
         } else {
-            print("❌ No auth token found in UserDefaults")
+            print(" No auth token found in UserDefaults")
         }
         
-        print("📤 Fetching user info with URL: \(url)")
+        print(" Fetching user info with URL: \(url)")
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("❌ Network error: \(error.localizedDescription)")
+                print(" Network error: \(error.localizedDescription)")
                 DispatchQueue.main.async {
                     completion(.failure(.networkError(error.localizedDescription)))
                 }
@@ -823,19 +823,19 @@ extension APIClient {
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ Failed to cast response to HTTPURLResponse")
+                print(" Failed to cast response to HTTPURLResponse")
                 DispatchQueue.main.async {
                     completion(.failure(.invalidResponse))
                 }
                 return
             }
             
-            print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+            print(" HTTP Status Code: \(httpResponse.statusCode)")
             
             if let data = data, let responseString = String(data: data, encoding: .utf8) {
-                print("📥 Response Data: \(responseString)")
+                print(" Response Data: \(responseString)")
             } else {
-                print("❌ No response data received")
+                print(" No response data received")
             }
             
             guard let data = data, httpResponse.statusCode == 200 else {
@@ -847,12 +847,12 @@ extension APIClient {
             
             do {
                 let user = try JSONDecoder().decode(User.self, from: data)
-                print("✅ Successfully decoded user: \(user)")
+                print(" Successfully decoded user: \(user)")
                 DispatchQueue.main.async {
                     completion(.success(user))
                 }
             } catch {
-                print("❌ JSON decoding error: \(error.localizedDescription)")
+                print(" JSON decoding error: \(error.localizedDescription)")
                 DispatchQueue.main.async {
                     completion(.failure(.unknownError))
                 }
@@ -862,7 +862,7 @@ extension APIClient {
     
     func createEventWithImage(eventDetails: EventDetails, image: UIImage, completion: @escaping (Result<Void, APIError>) -> Void) {
         guard let url = URL(string: "\(baseURL)events") else {
-            print("❌ Invalid URL: \(baseURL)events")
+            print(" Invalid URL: \(baseURL)events")
             completion(.failure(.invalidResponse))
             return
         }
@@ -870,7 +870,7 @@ extension APIClient {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         if let token = UserDefaults.standard.string(forKey: "authToken") {
-            print("📥 Using Auth Token: \(token)")
+            print(" Using Auth Token: \(token)")
             request.setValue("\(token)", forHTTPHeaderField: "Authorization")
         }
 
@@ -892,7 +892,7 @@ extension APIClient {
             "eventFee": eventDetails.eventFee
         ]
 
-        print("📤 Event Fields: \(fields)")
+        print(" Event Fields: \(fields)")
 
         for (key, value) in fields {
             body.append("--\(boundary)\r\n".data(using: .utf8)!)
@@ -907,42 +907,42 @@ extension APIClient {
             body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
             body.append(imageData)
             body.append("\r\n".data(using: .utf8)!)
-            print("📤 Image Data Added")
+            print(" Image Data Added")
         } else {
-            print("❌ Failed to compress image")
+            print(" Failed to compress image")
         }
 
         body.append("--\(boundary)--\r\n".data(using: .utf8)!)
         request.httpBody = body
 
-        print("📤 Sending Request to: \(url)")
-        print("📤 Request Headers: \(request.allHTTPHeaderFields ?? [:])")
-        print("📤 Request Body Size: \(body.count) bytes")
+        print(" Sending Request to: \(url)")
+        print(" Request Headers: \(request.allHTTPHeaderFields ?? [:])")
+        print(" Request Body Size: \(body.count) bytes")
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("❌ Network Error: \(error.localizedDescription)")
+                print("Network Error: \(error.localizedDescription)")
                 completion(.failure(.networkError(error.localizedDescription)))
                 return
             }
 
             if let httpResponse = response as? HTTPURLResponse {
-                print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+                print("HTTP Status Code: \(httpResponse.statusCode)")
             }
 
             if let data = data, let responseString = String(data: data, encoding: .utf8) {
-                print("📥 Response Data: \(responseString)")
+                print("Response Data: \(responseString)")
             } else {
-                print("❌ No Response Data")
+                print("No Response Data")
             }
 
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 201 else {
-                print("❌ Unexpected Status Code")
+                print("Unexpected Status Code")
                 completion(.failure(.unexpectedStatusCode))
                 return
             }
 
-            print("✅ Event Created Successfully")
+            print("Event Created Successfully")
             completion(.success(()))
         }.resume()
     }
@@ -1014,49 +1014,49 @@ extension APIClient {
     
     func fetchNotifications(completion: @escaping (Result<[Notification], APIError>) -> Void) {
         guard let url = URL(string: "\(baseURL)notification/user") else {
-            print("❌ Invalid URL for notifications endpoint")
+            print("Invalid URL for notifications endpoint")
             completion(.failure(.invalidResponse))
             return
         }
 
-        print("📤 Fetching notifications from URL: \(url)")
+        print("Fetching notifications from URL: \(url)")
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
 
         if let token = UserDefaults.standard.string(forKey: "authToken") {
             request.setValue("\(token)", forHTTPHeaderField: "Authorization")
-            print("🔑 Authorization token set: \(token.prefix(10))...") // Obfuscating token for security
+            print("Authorization token set: \(token.prefix(10))...")
         } else {
-            print("❌ No auth token found in UserDefaults")
+            print("No auth token found in UserDefaults")
         }
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("❌ Network error while fetching notifications: \(error.localizedDescription)")
+               
                 completion(.failure(.networkError(error.localizedDescription)))
                 return
             }
 
             if let httpResponse = response as? HTTPURLResponse {
-                print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+                print("HTTP Status Code: \(httpResponse.statusCode)")
             } else {
-                print("❌ Failed to get HTTP response")
+                print("Failed to get HTTP response")
             }
 
             guard let data = data else {
-                print("❌ No data received from notifications endpoint")
+                print("No data received from notifications endpoint")
                 completion(.failure(.invalidResponse))
                 return
             }
 
             do {
-                print("📥 Raw response data: \(String(data: data, encoding: .utf8) ?? "Unable to parse response")")
+                print("Raw response data: \(String(data: data, encoding: .utf8) ?? "Unable to parse response")")
                 let notifications = try JSONDecoder().decode([Notification].self, from: data)
-                print("✅ Successfully decoded \(notifications.count) notifications")
+                print(" Successfully decoded \(notifications.count) notifications")
                 completion(.success(notifications))
             } catch {
-                print("❌ Error decoding notifications: \(error.localizedDescription)")
+                print("Error decoding notifications: \(error.localizedDescription)")
                 completion(.failure(.unknownError))
             }
         }.resume()

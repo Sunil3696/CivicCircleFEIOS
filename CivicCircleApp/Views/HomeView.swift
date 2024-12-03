@@ -1,14 +1,14 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var forums: [Forum] = [] // Stores forums
-    @State private var newPostTitle: String = "" // Title for new post
-    @State private var newPostContent: String = "" // Content for new post
-    @State private var selectedImage: UIImage? // Image for new post
-    @State private var isImagePickerPresented = false // Image picker visibility
-    @State private var isLoading = false // Loading state
-    @State private var alertMessage: String? // Alert message
-    @State private var isAlertPresented = false // Alert visibility
+    @State private var forums: [Forum] = []
+    @State private var newPostTitle: String = ""
+    @State private var newPostContent: String = ""
+    @State private var selectedImage: UIImage?
+    @State private var isImagePickerPresented = false
+    @State private var isLoading = false
+    @State private var alertMessage: String?
+    @State private var isAlertPresented = false
 
     var body: some View {
         NavigationStack {
@@ -96,7 +96,7 @@ struct HomeView: View {
             .navigationTitle("Home")
             .onAppear(perform: fetchForums)
             .sheet(isPresented: $isImagePickerPresented) {
-                ImagePicker(selectedImage: $selectedImage, sourceType: .photoLibrary) // Use actual Image Picker
+                ImagePicker(selectedImage: $selectedImage, sourceType: .photoLibrary) 
             }
             .alert(isPresented: $isAlertPresented) {
                 Alert(title: Text("Message"), message: Text(alertMessage ?? ""), dismissButton: .default(Text("OK")))

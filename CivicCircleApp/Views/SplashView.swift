@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SplashView: View {
-    @State private var isNavigating = false // To trigger navigation
-    @State private var destination: AnyView = AnyView(LoginView()) // Default destination
+    @State private var isNavigating = false
+    @State private var destination: AnyView = AnyView(LoginView())
     @State private var showSessionExpiredMessage = false
 
     var body: some View {
@@ -31,7 +31,7 @@ struct SplashView: View {
                 Spacer()
             }
 
-            // Show session expired message if needed
+            // Show session expired message
             if showSessionExpiredMessage {
                 VStack {
                     Text("Session expired")
@@ -68,16 +68,16 @@ struct SplashView: View {
         print("🔍 Checking authentication...")
 
         guard let token = UserDefaults.standard.string(forKey: "authToken") else {
-            print("❌ No token found. Redirecting to LoginView.")
+            print(" No token found. Redirecting to LoginView.")
             destination = AnyView(LoginView())
             isNavigating = true
             return
         }
 
-        print("✅ Token found: \(token)")
+        print(" Token found: \(token)")
 
         if isTokenExpired(token) {
-            print("❌ Token is expired. Redirecting to LoginView.")
+            print(" Token is expired. Redirecting to LoginView.")
             // Show session expired message
             showSessionExpiredMessage = true
             destination = AnyView(LoginView())
@@ -85,7 +85,7 @@ struct SplashView: View {
             UserDefaults.standard.removeObject(forKey: "authToken")
             // Navigation will happen after message disappears
         } else {
-            print("✅ Token is valid. Redirecting to MainTabView.")
+            print(" Token is valid. Redirecting to MainTabView.")
             destination = AnyView(MainTabView())
             isNavigating = true
         }
@@ -96,7 +96,7 @@ struct SplashView: View {
 
         let segments = token.split(separator: ".")
         guard segments.count == 3 else {
-            print("❌ Invalid token format.")
+            print(" Invalid token format.")
             return true
         }
 
@@ -112,23 +112,23 @@ struct SplashView: View {
         }
 
         guard let payloadData = Data(base64Encoded: base64String) else {
-            print("❌ Failed to decode base64 payload.")
+            print(" Failed to decode base64 payload.")
             return true
         }
 
-        print("✅ Successfully decoded payload data.")
+        print(" Successfully decoded payload data.")
 
         guard let payload = try? JSONSerialization.jsonObject(with: payloadData, options: []) as? [String: Any],
               let exp = payload["exp"] as? TimeInterval else {
-            print("❌ Failed to extract 'exp' from payload.")
+            print(" Failed to extract 'exp' from payload.")
             return true
         }
 
         let expirationDate = Date(timeIntervalSince1970: exp)
-        print("🔍 Token expiration date: \(expirationDate)")
+        print("Token expiration date: \(expirationDate)")
 
         let isExpired = Date() >= expirationDate
-        print(isExpired ? "❌ Token has expired." : "✅ Token is still valid.")
+        print(isExpired ? " Token has expired." : " Token is still valid.")
         return isExpired
     }
 }

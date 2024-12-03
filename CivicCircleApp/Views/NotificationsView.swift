@@ -55,7 +55,6 @@ struct NotificationsView: View {
     private func formatDate(_ isoDate: String) -> String {
         var sanitizedDate = isoDate
         
-        // Remove milliseconds if present
         if let dotRange = sanitizedDate.range(of: ".") {
             if let zRange = sanitizedDate.range(of: "Z", range: dotRange.upperBound..<sanitizedDate.endIndex) {
                 sanitizedDate.removeSubrange(dotRange.lowerBound..<zRange.lowerBound)
@@ -73,7 +72,6 @@ struct NotificationsView: View {
             print("❌ Failed to parse sanitized date: \(sanitizedDate)")
         }
 
-        // Fallback to returning the raw date string if parsing fails
         return isoDate
     }
 

@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct OTPVerificationView: View {
-    let email: String                           // Passed email
-    @State private var otp = ""                 // OTP input
-    @State private var errorMessage: String?    // Error message for API response
-    @State private var isLoading = false        // Loader state
-    @State private var showSuccessPopup = false // Show success popup
+    let email: String
+    @State private var otp = ""
+    @State private var errorMessage: String?    
+    @State private var isLoading = false
+    @State private var showSuccessPopup = false
 
-    @Environment(\.dismiss) private var dismiss // Environment dismiss
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ZStack {
@@ -50,7 +50,7 @@ struct OTPVerificationView: View {
                     CustomTextField(placeholder: "Enter OTP", text: $otp, isSecure: false)
                         .keyboardType(.numberPad)
 
-                    // Error Message
+                    // erre Message
                     if let errorMessage = errorMessage {
                         Text(errorMessage)
                             .foregroundColor(.red)
@@ -64,7 +64,7 @@ struct OTPVerificationView: View {
                 .shadow(color: Color.gray.opacity(0.2), radius: 10, x: 0, y: 5)
                 .padding(.horizontal, 20)
 
-                // Verify OTP Button
+                // OTP Button
                 Button(action: verifyOTP) {
                     Text("Verify OTP")
                         .fontWeight(.bold)

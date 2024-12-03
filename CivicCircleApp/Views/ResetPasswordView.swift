@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct RequestResetView: View {
-    @State private var email = ""               // Email input
-    @State private var errorMessage: String?    // Error message for API response
-    @State private var isLoading = false        // Loader state
-    @State private var navigateToOTP = false    // Navigation state to OTP screen
+    @State private var email = ""
+    @State private var errorMessage: String?
+    @State private var isLoading = false
+    @State private var navigateToOTP = false    
 
     var body: some View {
         NavigationStack {
@@ -110,7 +110,7 @@ struct RequestResetView: View {
                 isLoading = false
                 switch result {
                 case .success:
-                    navigateToOTP = true // Navigate to OTP screen
+                    navigateToOTP = true
                 case .failure(let error):
                     errorMessage = (error as NSError).localizedDescription
                 }

@@ -7,11 +7,11 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var email = ""               // Email input
-    @State private var password = ""            // Password input
-    @State private var errorMessage: String?    // Error message for API response
-    @State private var isLoading = false        // Loader state
-    @State private var navigateToHome = false   // Navigation state
+    @State private var email = ""
+    @State private var password = ""
+    @State private var errorMessage: String?
+    @State private var isLoading = false
+    @State private var navigateToHome = false   
 
     var body: some View {
         NavigationStack {
@@ -120,9 +120,9 @@ struct LoginView: View {
                     .padding(.bottom, 30)
                 }
             }
-            .navigationBarHidden(true) // Hide navigation bar on login
+            .navigationBarHidden(true)
             .fullScreenCover(isPresented: $navigateToHome) {
-                MainTabView()  // Navigate to HomeView on successful login
+                MainTabView()
             }
         }
     }
@@ -144,7 +144,7 @@ struct LoginView: View {
                 case .success:
                     navigateToHome = true // Navigate to Home on success
                 case .failure(let error):
-                    // Display the localized error message
+                    
                     errorMessage = (error as NSError).localizedDescription
                 }
             }
