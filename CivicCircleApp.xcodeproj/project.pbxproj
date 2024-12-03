@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		100E786B2CFD4CBE00EF4B1D /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 100E786A2CFD4CBE00EF4B1D /* PopupView */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		100E78332CFD3F5800EF4B1D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,9 +33,22 @@
 		100E783C2CFD3F5800EF4B1D /* CivicCircleAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CivicCircleAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		100E78842CFD8C5200EF4B1D /* Exceptions for "CivicCircleApp" folder in "CivicCircleApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Views/Untitled.swift,
+			);
+			target = 100E78212CFD3F5700EF4B1D /* CivicCircleApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		100E78242CFD3F5700EF4B1D /* CivicCircleApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				100E78842CFD8C5200EF4B1D /* Exceptions for "CivicCircleApp" folder in "CivicCircleApp" target */,
+			);
 			path = CivicCircleApp;
 			sourceTree = "<group>";
 		};
@@ -52,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				100E786B2CFD4CBE00EF4B1D /* PopupView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +130,7 @@
 			);
 			name = CivicCircleApp;
 			packageProductDependencies = (
+				100E786A2CFD4CBE00EF4B1D /* PopupView */,
 			);
 			productName = CivicCircleApp;
 			productReference = 100E78222CFD3F5700EF4B1D /* CivicCircleApp.app */;
@@ -195,6 +214,9 @@
 			);
 			mainGroup = 100E78192CFD3F5700EF4B1D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				100E78692CFD4CBE00EF4B1D /* XCRemoteSwiftPackageReference "PopupView" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 100E78232CFD3F5700EF4B1D /* Products */;
 			projectDirPath = "";
@@ -558,6 +580,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		100E78692CFD4CBE00EF4B1D /* XCRemoteSwiftPackageReference "PopupView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/PopupView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		100E786A2CFD4CBE00EF4B1D /* PopupView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 100E78692CFD4CBE00EF4B1D /* XCRemoteSwiftPackageReference "PopupView" */;
+			productName = PopupView;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 100E781A2CFD3F5700EF4B1D /* Project object */;
 }

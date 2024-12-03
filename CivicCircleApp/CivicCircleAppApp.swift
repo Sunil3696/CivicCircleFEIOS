@@ -8,10 +8,12 @@
 import SwiftUI
 
 @main
-struct CivicCircleAppApp: App {
+struct CivicCircleApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                SplashView()
+            }
         }
     }
 }
