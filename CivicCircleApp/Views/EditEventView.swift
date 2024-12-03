@@ -35,111 +35,77 @@ struct EditEventView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(spacing: 16) {
+                VStack(spacing: 20) {
+                    // Section Title
+                    sectionTitle("Basic Information")
+                    
                     // Title Field
-                    TextField("Event Title", text: $title)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding()
-
+                    formField(title: "Event Title", value: $title)
+                    
                     // Description Field
-                    TextEditor(text: $description)
-                        .frame(height: 100)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-                        )
-                        .padding()
-
-                    // Contact Number Field
-                    TextField("Contact Number", text: $contactNumber)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding()
-
-                    // Venue Field
-                    TextField("Venue", text: $venue)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding()
-
-                    // Event Dates
-                    VStack(spacing: 8) {
-                        DatePicker("Event Start Date", selection: $eventDateFrom, displayedComponents: .date)
-                            .datePickerStyle(CompactDatePickerStyle())
-                        DatePicker("Event End Date", selection: $eventDateTo, displayedComponents: .date)
-                            .datePickerStyle(CompactDatePickerStyle())
+                    VStack(alignment: .leading) {
+                        Text("Description")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                        TextEditor(text: $description)
+                            .frame(height: 100)
+                            .padding(8)
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(8)
                     }
-                    .padding()
-
+                    
+                    // Section Title
+                    sectionTitle("Contact and Location")
+                    
+                    // Contact Number Field
+                    formField(title: "Contact Number", value: $contactNumber)
+                    
+                    // Venue Field
+                    formField(title: "Venue", value: $venue)
+                    
+                    // Section Title
+                    sectionTitle("Event Schedule")
+                    
+                    // Event Dates
+                    DatePicker("Start Date", selection: $eventDateFrom, displayedComponents: .date)
+                        .datePickerStyle(GraphicalDatePickerStyle())
+                    DatePicker("End Date", selection: $eventDateTo, displayedComponents: .date)
+                        .datePickerStyle(GraphicalDatePickerStyle())
+                    
+                    // Section Title
+                    sectionTitle("Participants and Fee")
+                    
                     // Participants Range
                     HStack {
-                        TextField("Min Participants", value: $totalParticipantsRangeMin, formatter: NumberFormatter())
+                        formField(title: "Min", value: Binding(get: { "\(totalParticipantsRangeMin)" }, set: { totalParticipantsRangeMin = Int($0) ?? 0 }))
                             .keyboardType(.numberPad)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                        TextField("Max Participants", value: $totalParticipantsRangeMax, formatter: NumberFormatter())
+                        formField(title: "Max", value: Binding(get: { "\(totalParticipantsRangeMax)" }, set: { totalParticipantsRangeMax = Int($0) ?? 0 }))
                             .keyboardType(.numberPad)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
-                    .padding()
-
+                    
                     // Event Fee
                     Picker("Event Fee", selection: $eventFee) {
                         Text("Free").tag("Free")
                         Text("Paid").tag("Paid")
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                    .padding()
-
+                    
+                    // Section Title
+                    sectionTitle("Event Image")
+                    
                     // Image Picker
-                    VStack {
-                        if let selectedImage = selectedImage {
-                            Image(uiImage: selectedImage)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 200)
-                                .cornerRadius(8)
-                                .padding()
-                        } else if let oldImageURL = oldImageURL {
-                            AsyncImage(url: URL(string: "http://10.0.0.185:3000\(oldImageURL)")) { phase in
-                                switch phase {
-                                case .empty:
-                                    ProgressView()
-                                        .frame(height: 200)
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 200)
-                                        .cornerRadius(8)
-                                        .padding()
-                                case .failure:
-                                    Text("Failed to load image")
-                                        .foregroundColor(.red)
-                                @unknown default:
-                                    EmptyView()
-                                }
-                            }
-                        } else {
-                            Button("Select Image") {
-                                isImagePickerPresented = true
-                            }
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                        }
-                    }
-
+                    imagePickerSection()
+                    
                     // Save Button
                     Button(action: submitEdit) {
                         Text(isSubmitting ? "Saving..." : "Save Changes")
                             .font(.headline)
                             .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity, minHeight: 50)
                             .background(isSubmitting ? Color.gray : Color.blue)
                             .cornerRadius(10)
                     }
                     .disabled(isSubmitting)
-                    .padding()
                 }
                 .padding()
             }
@@ -151,6 +117,60 @@ struct EditEventView: View {
                 ImagePicker(selectedImage: $selectedImage, sourceType: .photoLibrary)
             }
             .onAppear(perform: populateFields)
+        }
+    }
+
+    private func sectionTitle(_ title: String) -> some View {
+        Text(title)
+            .font(.headline)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 5)
+    }
+    
+    private func formField(title: String, value: Binding<String>) -> some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.subheadline)
+                .foregroundColor(.gray)
+            TextField(title, text: value)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+        }
+    }
+
+    private func imagePickerSection() -> some View {
+        VStack {
+            if let selectedImage = selectedImage {
+                Image(uiImage: selectedImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 200)
+                    .cornerRadius(8)
+            } else if let oldImageURL = oldImageURL {
+                AsyncImage(url: URL(string: "http://10.0.0.185:3000\(oldImageURL)")) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 200)
+                            .cornerRadius(8)
+                    case .failure:
+                        Text("Failed to load image")
+                            .foregroundColor(.red)
+                    @unknown default:
+                        EmptyView()
+                    }
+                }
+            }
+            Button("Select Image") {
+                isImagePickerPresented = true
+            }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(8)
         }
     }
 

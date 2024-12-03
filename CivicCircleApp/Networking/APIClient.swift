@@ -427,30 +427,46 @@ print(body)
 
 extension APIClient {
     func fetchEvents(completion: @escaping (Result<[Event], Error>) -> Void) {
-        guard let url = URL(string: "\(baseURL)events") else {
-            completion(.failure(NSError(domain: "Invalid URL", code: 0)))
-            return
+            guard let url = URL(string: "\(baseURL)events") else {
+                print("❌ Invalid URL: \(baseURL)events")
+                completion(.failure(NSError(domain: "Invalid URL", code: 0)))
+                return
+            }
+
+            print("📤 Sending request to: \(url)")
+
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    print("❌ Network error: \(error.localizedDescription)")
+                    completion(.failure(error))
+                    return
+                }
+
+                if let httpResponse = response as? HTTPURLResponse {
+                    print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+                }
+
+                guard let data = data else {
+                    print("❌ No data received")
+                    completion(.failure(NSError(domain: "No data", code: 0)))
+                    return
+                }
+
+                // Debugging raw JSON response
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("📥 Raw Response Data: \(jsonString)")
+                }
+
+                do {
+                    let events = try JSONDecoder().decode([Event].self, from: data)
+                    print("✅ Successfully decoded events: \(events.count) items")
+                    completion(.success(events))
+                } catch {
+                    print("❌ Decoding error: \(error.localizedDescription)")
+                    completion(.failure(error))
+                }
+            }.resume()
         }
-
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-
-            guard let data = data else {
-                completion(.failure(NSError(domain: "No data", code: 0)))
-                return
-            }
-
-            do {
-                let events = try JSONDecoder().decode([Event].self, from: data)
-                completion(.success(events))
-            } catch {
-                completion(.failure(error))
-            }
-        }.resume()
-    }
     
     func fetchEventById(id: String, completion: @escaping (Result<Event, Error>) -> Void) {
             guard let url = URL(string: "\(baseURL)events/\(id)") else {

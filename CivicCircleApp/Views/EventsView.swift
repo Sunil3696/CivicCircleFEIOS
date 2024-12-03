@@ -19,6 +19,8 @@ struct EventsView: View {
                 } else if let errorMessage = errorMessage {
                     Text(errorMessage)
                         .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
+                        .padding()
                 } else if events.isEmpty {
                     Text("No events available.")
                         .font(.title3)
@@ -45,9 +47,13 @@ struct EventsView: View {
                 isLoading = false
                 switch result {
                 case .success(let fetchedEvents):
+                    if fetchedEvents.isEmpty {
+                        print("✅ No events returned by the API.")
+                    }
                     events = fetchedEvents
                 case .failure(let error):
                     errorMessage = "Failed to load events: \(error.localizedDescription)"
+                    print("❌ Error fetching events: \(error.localizedDescription)")
                 }
             }
         }

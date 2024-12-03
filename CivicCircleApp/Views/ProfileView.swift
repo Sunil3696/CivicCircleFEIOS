@@ -47,7 +47,7 @@ struct ProfileView: View {
                                     .font(.headline)
                                     .padding()
                                     .frame(maxWidth: .infinity)
-                                    .background(Color.blue)
+                                    .background(LinearGradient(gradient: Gradient(colors: [.blue, .purple]), startPoint: .leading, endPoint: .trailing))
                                     .foregroundColor(.white)
                                     .cornerRadius(10)
                                     .shadow(radius: 5)

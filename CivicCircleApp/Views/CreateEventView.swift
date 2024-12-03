@@ -76,7 +76,7 @@ struct CreateEventView: View {
                     Text("Create Event")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
+                        .background(LinearGradient(gradient: Gradient(colors: [.blue, .purple]), startPoint: .leading, endPoint: .trailing))
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -94,17 +94,36 @@ struct CreateEventView: View {
         guard let image = selectedImage else { return }
 
         isSubmitting = true
+
+        // Format the dates to ISO8601
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.timeZone = TimeZone(secondsFromGMT: 0) // Ensure UTC
+
+        let formattedEventDateFrom = isoFormatter.string(from: eventDateFrom)
+        let formattedEventDateTo = isoFormatter.string(from: eventDateTo)
+
+        // Updated event details with correctly formatted dates
         let eventDetails = EventDetails(
             title: title,
             description: description,
             contactNumber: contactNumber,
             venue: venue,
-            eventDateFrom: eventDateFrom,
-            eventDateTo: eventDateTo,
+            eventDateFrom: eventDateFrom, // Still using Date object for local UI updates
+            eventDateTo: eventDateTo,     // Using Date object for local UI updates
             totalParticipantsRangeMin: Int(participantMin) ?? 0,
             totalParticipantsRangeMax: Int(participantMax) ?? 0,
             eventFee: eventFee
         )
+
+        print("📤 Event Details Being Sent:")
+        print("Title: \(title)")
+        print("Description: \(description)")
+        print("Contact Number: \(contactNumber)")
+        print("Venue: \(venue)")
+        print("Event Date From: \(formattedEventDateFrom)")
+        print("Event Date To: \(formattedEventDateTo)")
+        print("Participants Min: \(participantMin)")
+        print("Participants Max: \(participantMax)")
 
         APIClient.shared.createEventWithImage(eventDetails: eventDetails, image: image) { result in
             DispatchQueue.main.async {
@@ -112,11 +131,14 @@ struct CreateEventView: View {
                 switch result {
                 case .success:
                     alertMessage = "Event created successfully!"
+                    print("✅ Event successfully created!")
                 case .failure(let error):
                     alertMessage = "Failed to create event: \(error.localizedDescription)"
+                    print("❌ Error creating event: \(error.localizedDescription)")
                 }
                 showAlert = true
             }
         }
     }
+
 }
