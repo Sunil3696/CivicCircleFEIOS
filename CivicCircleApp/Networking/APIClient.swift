@@ -995,6 +995,57 @@ extension APIClient {
                completion(.success(()))
            }.resume()
        }
+    
+    func fetchNotifications(completion: @escaping (Result<[Notification], APIError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)notification/user") else {
+            print("❌ Invalid URL for notifications endpoint")
+            completion(.failure(.invalidResponse))
+            return
+        }
+
+        print("📤 Fetching notifications from URL: \(url)")
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        if let token = UserDefaults.standard.string(forKey: "authToken") {
+            request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+            print("🔑 Authorization token set: \(token.prefix(10))...") // Obfuscating token for security
+        } else {
+            print("❌ No auth token found in UserDefaults")
+        }
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("❌ Network error while fetching notifications: \(error.localizedDescription)")
+                completion(.failure(.networkError(error.localizedDescription)))
+                return
+            }
+
+            if let httpResponse = response as? HTTPURLResponse {
+                print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+            } else {
+                print("❌ Failed to get HTTP response")
+            }
+
+            guard let data = data else {
+                print("❌ No data received from notifications endpoint")
+                completion(.failure(.invalidResponse))
+                return
+            }
+
+            do {
+                print("📥 Raw response data: \(String(data: data, encoding: .utf8) ?? "Unable to parse response")")
+                let notifications = try JSONDecoder().decode([Notification].self, from: data)
+                print("✅ Successfully decoded \(notifications.count) notifications")
+                completion(.success(notifications))
+            } catch {
+                print("❌ Error decoding notifications: \(error.localizedDescription)")
+                completion(.failure(.unknownError))
+            }
+        }.resume()
+    }
+
 
 }
 

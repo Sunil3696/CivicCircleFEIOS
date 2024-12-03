@@ -18,10 +18,10 @@ struct MainTabView: View {
                     Label("Events", systemImage: "calendar")
                 }
 
-//            NotificationsView()
-//                .tabItem {
-//                    Label("Notifications", systemImage: "bell.fill")
-//                }
+            NotificationsView()
+                .tabItem {
+                    Label("Notifications", systemImage: "bell.fill")
+                }
 
             ProfileView() // Use the fully implemented ProfileView
                 .tabItem {
