@@ -7,6 +7,7 @@ struct ProfileView: View {
     @State private var errorMessage: String?
     @State private var showAlert = false
     @State private var alertMessage = ""
+    @State private var isLoggedOut = false // State to track logout navigation
 
     var body: some View {
         NavigationView {
@@ -63,6 +64,19 @@ struct ProfileView: View {
                                     ProfileEventCard(event: event, onDelete: { deleteEvent(event) })
                                 }
                             }
+
+                            // Logout Button
+                            Button(action: logout) {
+                                Text("Logout")
+                                    .font(.headline)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.red)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 5)
+                            }
+                            .padding(.top, 20)
                         }
                         .padding()
                     }
@@ -73,6 +87,12 @@ struct ProfileView: View {
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Message"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
             }
+            .background(
+                NavigationLink(destination: LoginView(), isActive: $isLoggedOut) {
+                    EmptyView()
+                }
+                .hidden()
+            )
             .onAppear {
                 fetchUserProfile()
             }
@@ -125,6 +145,16 @@ struct ProfileView: View {
                     showAlert = true
                 }
             }
+        }
+    }
+
+    private func logout() {
+        print("🚪 Logging out user...")
+        UserDefaults.standard.removeObject(forKey: "authToken") // Clear authentication token
+        alertMessage = "You have been logged out."
+        showAlert = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            isLoggedOut = true // Navigate to LoginView
         }
     }
 

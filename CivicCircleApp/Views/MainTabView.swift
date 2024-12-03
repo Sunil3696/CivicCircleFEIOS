@@ -18,10 +18,10 @@ struct MainTabView: View {
                     Label("Events", systemImage: "calendar")
                 }
 
-            NotificationsView()
-                .tabItem {
-                    Label("Notifications", systemImage: "bell.fill")
-                }
+//            NotificationsView()
+//                .tabItem {
+//                    Label("Notifications", systemImage: "bell.fill")
+//                }
 
             ProfileView() // Use the fully implemented ProfileView
                 .tabItem {
@@ -33,13 +33,7 @@ struct MainTabView: View {
 }
 
 
-struct NotificationsView: View {
-    var body: some View {
-        Text("Notifications Page")
-            .font(.title)
-            .foregroundColor(.gray)
-    }
-}
+
 
 struct MainTabView_Previews: PreviewProvider {
     static var previews: some View {

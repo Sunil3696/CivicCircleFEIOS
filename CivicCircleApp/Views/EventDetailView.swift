@@ -68,6 +68,8 @@ struct EventDetailView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             DetailRow(icon: "location.fill", text: "Venue: \(event.venue)")
                             DetailRow(icon: "calendar", text: "Date: \(event.eventDateFrom) to \(event.eventDateTo)")
+                            
+
                             DetailRow(icon: "phone.fill", text: "Contact: \(event.contactNumber)")
                             DetailRow(icon: "dollarsign.circle.fill", text: "Fee: \(event.eventFee)")
                             DetailRow(icon: "person.3.fill", text: "Participants: \(event.participants.count)/\(event.totalParticipantsRange.max)",
@@ -214,6 +216,16 @@ struct EventDetailView: View {
                     fetchEventDetails()
                     alertMessage = "You have successfully joined the event."
                     showCustomAlert = true
+
+                    // Schedule notifications
+                    let currentDate = Date()
+                    let eventEndDate = ISO8601DateFormatter().date(from: event.eventDateTo) ?? currentDate
+                    NotificationGenerator.generateNotification(
+                        title: "Event Reminder",
+                        description: "Don't forget about your event: \(event.title)",
+                        startDate: currentDate.addingTimeInterval(15),
+                        endDate: eventEndDate
+                    )
                 case .failure(let error):
                     if case .networkError(let message) = error, message == "You have already joined this event" {
                         alertMessage = "You have already joined this event."
@@ -226,6 +238,12 @@ struct EventDetailView: View {
             }
         }
     }
+
+
+   
+
+
+
 
     private func cancelParticipation() {
         guard let event = event else { return }
