@@ -671,3 +671,344 @@ extension APIClient {
     
 
 
+extension APIClient {
+    func fetchUserEvents(completion: @escaping (Result<[UserEvent], APIError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)events/myEvents") else {
+            print("❌ Invalid URL: \(baseURL)events/myEvents")
+            completion(.failure(.invalidResponse))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        if let token = UserDefaults.standard.string(forKey: "authToken") {
+            request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+        } else {
+            print("❌ Missing auth token")
+        }
+        
+        print("📤 Fetching user events with URL: \(url)")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("❌ Network error: \(error.localizedDescription)")
+                completion(.failure(.networkError(error.localizedDescription)))
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ Invalid response from server")
+                completion(.failure(.invalidResponse))
+                return
+            }
+            
+            print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+            
+            if httpResponse.statusCode != 200 {
+                print("❌ Unexpected status code: \(httpResponse.statusCode)")
+                completion(.failure(.unexpectedStatusCode))
+                return
+            }
+            
+            guard let data = data else {
+                print("❌ No data received from server")
+                completion(.failure(.invalidResponse))
+                return
+            }
+            
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("📥 Response Data: \(responseString)")
+            } else {
+                print("❌ Unable to parse response data")
+            }
+            
+            do {
+                let events = try JSONDecoder().decode([UserEvent].self, from: data)
+                print("✅ Decoded user events: \(events)")
+                completion(.success(events))
+            } catch {
+                print("❌ Decoding error: \(error.localizedDescription)")
+                completion(.failure(.unknownError))
+            }
+        }.resume()
+    }
+    
+    func deleteEvent(eventId: String, completion: @escaping (Result<Void, APIError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)events/\(eventId)") else {
+            print("❌ Invalid URL: \(baseURL)events/\(eventId)")
+            completion(.failure(.invalidResponse))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        if let token = UserDefaults.standard.string(forKey: "authToken") {
+            request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+        } else {
+            print("❌ Missing auth token")
+        }
+        
+        print("📤 Deleting event with ID: \(eventId) using URL: \(url)")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("❌ Network error: \(error.localizedDescription)")
+                completion(.failure(.networkError(error.localizedDescription)))
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ Invalid response from server")
+                completion(.failure(.invalidResponse))
+                return
+            }
+            
+            print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+            
+            if httpResponse.statusCode != 200 {
+                if let data = data, let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ Error Response: \(responseString)")
+                }
+                completion(.failure(.unexpectedStatusCode))
+                return
+            }
+            
+            print("✅ Event with ID \(eventId) deleted successfully")
+            completion(.success(()))
+        }.resume()
+    }
+    
+    
+    func fetchUserInfo(completion: @escaping (Result<User, APIError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)auth/me") else {
+            print("❌ Invalid URL: \(baseURL)auth/me")
+            completion(.failure(.invalidResponse))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        if let token = UserDefaults.standard.string(forKey: "authToken") {
+            request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+            print("📥 Authorization Token: \(token)")
+        } else {
+            print("❌ No auth token found in UserDefaults")
+        }
+        
+        print("📤 Fetching user info with URL: \(url)")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("❌ Network error: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(.failure(.networkError(error.localizedDescription)))
+                }
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ Failed to cast response to HTTPURLResponse")
+                DispatchQueue.main.async {
+                    completion(.failure(.invalidResponse))
+                }
+                return
+            }
+            
+            print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+            
+            if let data = data, let responseString = String(data: data, encoding: .utf8) {
+                print("📥 Response Data: \(responseString)")
+            } else {
+                print("❌ No response data received")
+            }
+            
+            guard let data = data, httpResponse.statusCode == 200 else {
+                DispatchQueue.main.async {
+                    completion(.failure(.invalidResponse))
+                }
+                return
+            }
+            
+            do {
+                let user = try JSONDecoder().decode(User.self, from: data)
+                print("✅ Successfully decoded user: \(user)")
+                DispatchQueue.main.async {
+                    completion(.success(user))
+                }
+            } catch {
+                print("❌ JSON decoding error: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(.failure(.unknownError))
+                }
+            }
+        }.resume()
+    }
+    
+    func createEventWithImage(eventDetails: EventDetails, image: UIImage, completion: @escaping (Result<Void, APIError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)events") else {
+            print("❌ Invalid URL: \(baseURL)events")
+            completion(.failure(.invalidResponse))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        if let token = UserDefaults.standard.string(forKey: "authToken") {
+            print("📥 Using Auth Token: \(token)")
+            request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        let boundary = "Boundary-\(UUID().uuidString)"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var body = Data()
+
+        // Add text fields
+        let fields = [
+            "title": eventDetails.title,
+            "description": eventDetails.description,
+            "contactNumber": eventDetails.contactNumber,
+            "venue": eventDetails.venue,
+            "eventDateFrom": ISO8601DateFormatter().string(from: eventDetails.eventDateFrom),
+            "eventDateTo": ISO8601DateFormatter().string(from: eventDetails.eventDateTo),
+            "totalParticipantsRangeMin": "\(eventDetails.totalParticipantsRangeMin)",
+            "totalParticipantsRangeMax": "\(eventDetails.totalParticipantsRangeMax)",
+            "eventFee": eventDetails.eventFee
+        ]
+
+        print("📤 Event Fields: \(fields)")
+
+        for (key, value) in fields {
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8)!)
+            body.append("\(value)\r\n".data(using: .utf8)!)
+        }
+
+        // Add image
+        if let imageData = image.jpegData(compressionQuality: 0.8) {
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"images\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
+            body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+            body.append(imageData)
+            body.append("\r\n".data(using: .utf8)!)
+            print("📤 Image Data Added")
+        } else {
+            print("❌ Failed to compress image")
+        }
+
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        request.httpBody = body
+
+        print("📤 Sending Request to: \(url)")
+        print("📤 Request Headers: \(request.allHTTPHeaderFields ?? [:])")
+        print("📤 Request Body Size: \(body.count) bytes")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("❌ Network Error: \(error.localizedDescription)")
+                completion(.failure(.networkError(error.localizedDescription)))
+                return
+            }
+
+            if let httpResponse = response as? HTTPURLResponse {
+                print("📥 HTTP Status Code: \(httpResponse.statusCode)")
+            }
+
+            if let data = data, let responseString = String(data: data, encoding: .utf8) {
+                print("📥 Response Data: \(responseString)")
+            } else {
+                print("❌ No Response Data")
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 201 else {
+                print("❌ Unexpected Status Code")
+                completion(.failure(.unexpectedStatusCode))
+                return
+            }
+
+            print("✅ Event Created Successfully")
+            completion(.success(()))
+        }.resume()
+    }
+
+    
+    
+    func updateEvent(eventId: String, eventDetails: EventDetails, image: UIImage?, completion: @escaping (Result<Void, APIError>) -> Void) {
+           guard let url = URL(string: "\(baseURL)events/\(eventId)") else {
+               completion(.failure(.invalidResponse))
+               return
+           }
+
+           var request = URLRequest(url: url)
+           request.httpMethod = "PUT"
+           if let token = UserDefaults.standard.string(forKey: "authToken") {
+               request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+           }
+
+           let boundary = "Boundary-\(UUID().uuidString)"
+           request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+           var body = Data()
+
+           // Add text fields
+           let fields = [
+               "title": eventDetails.title,
+               "description": eventDetails.description,
+               "contactNumber": eventDetails.contactNumber,
+               "venue": eventDetails.venue,
+               "eventDateFrom": ISO8601DateFormatter().string(from: eventDetails.eventDateFrom),
+               "eventDateTo": ISO8601DateFormatter().string(from: eventDetails.eventDateTo),
+               "totalParticipantsRangeMin": "\(eventDetails.totalParticipantsRangeMin)",
+               "totalParticipantsRangeMax": "\(eventDetails.totalParticipantsRangeMax)",
+               "eventFee": eventDetails.eventFee
+           ]
+
+           for (key, value) in fields {
+               body.append("--\(boundary)\r\n".data(using: .utf8)!)
+               body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8)!)
+               body.append("\(value)\r\n".data(using: .utf8)!)
+           }
+
+           // Add image if available
+           if let image = image, let imageData = image.jpegData(compressionQuality: 0.8) {
+               body.append("--\(boundary)\r\n".data(using: .utf8)!)
+               body.append("Content-Disposition: form-data; name=\"images\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
+               body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+               body.append(imageData)
+               body.append("\r\n".data(using: .utf8)!)
+           }
+
+           body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+           request.httpBody = body
+
+           URLSession.shared.dataTask(with: request) { data, response, error in
+               if let error = error {
+                   completion(.failure(.networkError(error.localizedDescription)))
+                   return
+               }
+
+               guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                   completion(.failure(.unexpectedStatusCode))
+                   return
+               }
+
+               completion(.success(()))
+           }.resume()
+       }
+
+}
+
+   struct EventDetails: Codable {
+       let title: String
+       let description: String
+       let contactNumber: String
+       let venue: String
+       let eventDateFrom: Date
+       let eventDateTo: Date
+       let totalParticipantsRangeMin: Int
+       let totalParticipantsRangeMax: Int
+       let eventFee: String
+   }
+    
+
+

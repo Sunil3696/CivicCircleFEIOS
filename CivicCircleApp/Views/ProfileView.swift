@@ -1,105 +1,140 @@
-//
-//  ProfileView.swift
-//  CivicCircleApp
-//
-//  Created by Sunil Balami on 2024-12-02.
-//
-
-
 import SwiftUI
 
 struct ProfileView: View {
-    @State private var userName: String = "John Doe" // Placeholder for user's name
-    @State private var userEmail: String = "johndoe@example.com" // Placeholder for user's email
-    @State private var isLoggingOut = false // Logging out state
+    @State private var user: User?
+    @State private var userEvents: [UserEvent] = []
+    @State private var isLoading = true
+    @State private var errorMessage: String?
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                // Background Gradient
-                LinearGradient(
-                    gradient: Gradient(colors: [Color.blue.opacity(0.2), Color.purple.opacity(0.1)]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea()
+        NavigationView {
+            VStack {
+                if isLoading {
+                    ProgressView("Loading profile...")
+                } else if let errorMessage = errorMessage {
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                } else {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 20) {
+                            // User Information Section
+                            if let user = user {
+                                VStack(alignment: .leading, spacing: 10) {
+                                    Text("User Information")
+                                        .font(.headline)
+                                        .padding(.bottom, 5)
 
-                VStack(spacing: 30) {
-                    // Profile Avatar and Info
-                    VStack(spacing: 15) {
-                        Image(systemName: "person.crop.circle.fill")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .foregroundColor(.blue)
+                                    Text("Name: \(user.fullName)")
+                                    Text("Email: \(user.email)")
+                                    Text("Phone: \(user.phone)")
+                                    Text("Address: \(user.address)")
+                                    Text("Joined: \(formatDate(user.createdAt))")
+                                }
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .shadow(radius: 5)
+                            }
 
-                        Text(userName)
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
+                            // Add Event Button
+                            NavigationLink(destination: CreateEventView()) {
+                                Text("Create New Event")
+                                    .font(.headline)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 5)
+                            }
+                            .padding(.vertical)
 
-                        Text(userEmail)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            // User Events Section
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("Your Events")
+                                    .font(.headline)
+                                    .padding(.bottom, 5)
+
+                                ForEach(userEvents) { event in
+                                    ProfileEventCard(event: event, onDelete: { deleteEvent(event) })
+                                }
+                            }
+                        }
+                        .padding()
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(Color.white)
-                            .shadow(color: Color.gray.opacity(0.2), radius: 8, x: 0, y: 4)
-                    )
-
-                    Spacer()
-
-                    // Logout Button
-                    Button(action: handleLogout) {
-                        Text("Log Out")
-                            .fontWeight(.bold)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color.red, Color.orange]),
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 4)
-                    }
-                    .padding(.horizontal, 40)
                 }
-                .padding(.top, 50)
             }
             .navigationTitle("Profile")
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear(perform: loadUserProfile)
-        }
-        .fullScreenCover(isPresented: $isLoggingOut) {
-            LoginView() // Redirect to login view after logout
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Message"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+            }
+            .onAppear {
+                fetchUserProfile()
+            }
         }
     }
 
-    // Function to handle logout
-    private func handleLogout() {
-        UserDefaults.standard.removeObject(forKey: "authToken") // Remove token from storage
-        isLoggingOut = true // Trigger navigation to LoginView
-    }
+    private func fetchUserProfile() {
+        isLoading = true
+        errorMessage = nil
 
-    // Function to load user profile (e.g., from API or local storage)
-    private func loadUserProfile() {
-        // Placeholder logic for loading user profile
-        if let token = UserDefaults.standard.string(forKey: "authToken") {
-            print("User is logged in with token: \(token)")
-            // Call API or load user details from storage
-        } else {
-            print("No user token found")
+        // Fetch user info
+        APIClient.shared.fetchUserInfo { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let fetchedUser):
+                    self.user = fetchedUser
+                    self.fetchUserEvents() // Fetch events after fetching user data
+                case .failure(let error):
+                    self.errorMessage = "Failed to load user info: \(error.localizedDescription)"
+                    self.isLoading = false
+                }
+            }
         }
     }
-}
 
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
+    private func fetchUserEvents() {
+        APIClient.shared.fetchUserEvents { result in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                switch result {
+                case .success(let events):
+                    self.userEvents = events
+                case .failure(let error):
+                    self.errorMessage = "Failed to fetch events: \(error.localizedDescription)"
+                }
+            }
+        }
+    }
+
+    private func deleteEvent(_ event: UserEvent) {
+        APIClient.shared.deleteEvent(eventId: event.id) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    userEvents.removeAll { $0.id == event.id }
+                    alertMessage = "Event deleted successfully."
+                    showAlert = true
+                case .failure(let error):
+                    alertMessage = "Failed to delete event: \(error.localizedDescription)"
+                    showAlert = true
+                }
+            }
+        }
+    }
+
+    private func formatDate(_ isoDate: String) -> String {
+        let formatter = ISO8601DateFormatter()
+        if let date = formatter.date(from: isoDate) {
+            let displayFormatter = DateFormatter()
+            displayFormatter.dateStyle = .medium
+            return displayFormatter.string(from: date)
+        }
+        return isoDate
     }
 }

@@ -32,13 +32,6 @@ struct MainTabView: View {
     }
 }
 
-//struct EventsView: View {
-//    var body: some View {
-//        Text("Events Page")
-//            .font(.title)
-//            .foregroundColor(.gray)
-//    }
-//}
 
 struct NotificationsView: View {
     var body: some View {
